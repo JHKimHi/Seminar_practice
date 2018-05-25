@@ -24,22 +24,22 @@ plt.grid()
 plt.legend()
 plt.draw()
 
-loss = tf.reduce_mean(tf.square(Y_MK - Y))
-optimizer = tf.train.GradientDescentOptimizer(0.5)
-train = optimizer.minimize(loss)
+LOSS = tf.reduce_mean(tf.square(Y_MK - Y))
+OPTIMIZER = tf.train.GradientDescentOptimizer(0.5)
+TRAIN = OPTIMIZER.minimize(LOSS)
 
-init = tf.initialize_all_variables()
+INIT = tf.initialize_all_variables()
 
-sess = tf.Session()
-sess.run(init)
+SESS = tf.Session()
+SESS.run(INIT)
 
 for step in range(8):
-    sess.run(train)
-    print(step, sess.run(W), sess.run(B))
-    print(step, sess.run(loss))
+    SESS.run(TRAIN)
+    print(step, SESS.run(W), SESS.run(B))
+    print(step, SESS.run(LOSS))
 
     # Graphic display
-    plt.plot(X, sess.run(W) * X + sess.run(B))
+    plt.plot(X, SESS.run(W) * X + SESS.run(B))
     plt.xlabel('X')
     plt.xlim(-2, 2)
     plt.ylim(0.1, 0.6)
