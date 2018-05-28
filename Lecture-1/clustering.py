@@ -10,6 +10,7 @@ NUM_CLUSTERS = 3
 POINTS_X = []
 POINTS_Y = []
 
+# 1000개의 랜덤 포인트를 3개의 클러스터로 생성
 for k in range(NUM_POINTS):
     if np.random.random() > 0.66666:
         POINTS_X.append(np.random.normal(0.0, 0.6))
@@ -21,12 +22,13 @@ for k in range(NUM_POINTS):
         POINTS_X.append(np.random.normal(2.0, 0.33))
         POINTS_Y.append(1 + np.random.normal(0.0, 0.2))
 
-# POINTS = np.array([np.transpose(POINTS_X), np.transpose(POINTS_Y)])
+# 1000개의 포인트를 numpy array로 생성
 POINTS = np.array(np.transpose([POINTS_X, POINTS_Y]))
 
+# numpy array를 tensor로 변환
 VECTORS = tf.constant(POINTS)
 CENTROIDES = tf.Variable(tf.slice(tf.random_shuffle(VECTORS), [0, 0],
-                                  [NUM_CLUSTERS, -1]))
+                                  [NUM_CLUSTERS, -1])) # 중심점 초기화
 EXPANDED_VECTORS = tf.expand_dims(VECTORS, 0)
 EXPANDED_CENTROIDES = tf.expand_dims(CENTROIDES, 1)
 

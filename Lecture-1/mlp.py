@@ -71,6 +71,8 @@ for i in range(300):
             accuracy, feed_dict={x: batch[0], y: batch[1], keep_prob: 1.0})
         print("step {}, training accuracy {}".format(i, train_accuracy))
     sess.run(train_step, feed_dict={x: batch[0], y: batch[1], keep_prob: 0.5})
+    writer = tf.summary.FileWriter("C:/Users/kim/sublime/tmp", sess.graph)
+
 
 print("test accuracy {}".format(
     sess.run(accuracy, feed_dict={x: mnist.test.images,
