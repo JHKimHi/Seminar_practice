@@ -1,6 +1,6 @@
 import tensorflow as tf
-import input_data
-mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
+from tensorflow.contrib.learn.python.learn.datasets.mnist import read_data_sets
+mnist = read_data_sets("MNIST_data/", one_hot=True) # dataset download
 
 x = tf.placeholder("float", shape=[None, 784])
 y = tf.placeholder("float", shape=[None, 10])
@@ -11,20 +11,24 @@ print(x_image)
 
 
 def weight_variable(shape):
+    # weight function
     initial = tf.truncated_normal(shape, stddev=0.1)
     return tf.Variable(initial)
 
 
 def bias_variable(shape):
+    # bias function
     initial = tf.constant(0.1, shape=shape)
     return tf.Variable(initial)
 
 
 def conv2d(x, W):
+    # convolution layer fucntion
     return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 
 
 def max_pool_2x2(x):
+    # max pooling layre function
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                           strides=[1, 2, 2, 1], padding='SAME')
 

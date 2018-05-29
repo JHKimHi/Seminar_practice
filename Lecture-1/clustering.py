@@ -5,67 +5,72 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-NUM_POINTS = 1000
-NUM_CLUSTERS = 3
-POINTS_X = []
-POINTS_Y = []
+num_points = 1000
+num_clusters = 3
+points_x = []
+points_y = []
 
 # 1000개의 랜덤 포인트를 3개의 클러스터로 생성
-for k in range(NUM_POINTS):
+for k in range(num_points):
     if np.random.random() > 0.66666:
-        POINTS_X.append(np.random.normal(0.0, 0.6))
-        POINTS_Y.append(np.random.normal(0.0, 0.6))
+        points_x.append(np.random.normal(0.0, 0.6))
+        points_y.append(np.random.normal(0.0, 0.6))
     elif np.random.random() > 0.33333:
-        POINTS_X.append(np.random.normal(2.0, 0.57))
-        POINTS_Y.append(np.random.normal(3.0, 0.6))
+        points_x.append(np.random.normal(2.0, 0.57))
+        points_y.append(np.random.normal(3.0, 0.6))
     else:
-        POINTS_X.append(np.random.normal(2.0, 0.33))
-        POINTS_Y.append(1 + np.random.normal(0.0, 0.2))
+        points_x.append(np.random.normal(2.0, 0.33))
+        points_y.append(np.random.normal(1.0, 0.2))
 
 # 1000개의 포인트를 numpy array로 생성
-POINTS = np.array(np.transpose([POINTS_X, POINTS_Y]))
+points = np.array(np.transpose([points_x, points_y]))
 
 # numpy array를 tensor로 변환
-VECTORS = tf.constant(POINTS)
-CENTROIDES = tf.Variable(tf.slice(tf.random_shuffle(VECTORS), [0, 0],
-                                  [NUM_CLUSTERS, -1])) # 중심점 초기화
-EXPANDED_VECTORS = tf.expand_dims(VECTORS, 0)
-EXPANDED_CENTROIDES = tf.expand_dims(CENTROIDES, 1)
+vectors = tf.constant(points)
+centroides = tf.Variable(tf.slice(tf.random_shuffle(vectors), [0, 0],
+                                  [num_clusters, -1])) # 중심점 초기화
 
-ASSIGNMENTS = tf.argmin(tf.reduce_sum(tf.square(
-    tf.subtract(EXPANDED_VECTORS, EXPANDED_CENTROIDES)), 2), 0)
-MEANS = tf.concat([tf.reduce_mean(tf.gather(
-    VECTORS, tf.reshape(tf.where(tf.equal(
-        ASSIGNMENTS, c)), [1, -1])), axis=[1])
-                   for c in range(NUM_CLUSTERS)], 0)
+# 텐서 차원 확장
+expanded_vectors = tf.expand_dims(vectors, 0)
+expanded_centroides = tf.expand_dims(centroides, 1)
 
-UPDATE_CENTROIDES = tf.assign(CENTROIDES, MEANS)
+# 거리 계산
+diff = tf.subtract(expanded_vectors, expanded_centroides)
+distance = tf.reduce_sum(tf.square(diff), 2)
+assignments = tf.argmin(distance, 0)
 
-INIT_OP = tf.initialize_all_variables()
+# 중심점 업데이트
+means = tf.concat([tf.reduce_mean(tf.gather(
+    vectors, tf.reshape(tf.where(tf.equal(
+        assignments, c)), [1, -1])), axis=[1])
+                   for c in range(num_clusters)], 0)
 
-SESS = tf.Session()
-SESS.run(INIT_OP)
+
+update_centroides = tf.assign(centroides, means)
+
+init_op = tf.global_variables_initializer()
+sess = tf.Session()
+sess.run(init_op)
 
 for step in range(100):
-    _, centroid_values, assignment_values = SESS.run([UPDATE_CENTROIDES,
-                                                      CENTROIDES, ASSIGNMENTS])
+    _, centroid_values, assignment_values = sess.run([update_centroides,
+                                                      centroides, assignments])
 
-plt.plot(POINTS_X, POINTS_Y, 'ro', label='Original data')
+plt.plot(points_x, points_y, 'ro', label='original data')
 plt.grid()
 plt.legend()
-plt.draw()
+plt.show()
+# plt.draw()
 plt.pause(0.01)
 
 print(centroid_values)
 
 for k, cluster in enumerate(assignment_values):
     if cluster == 0:
-        plt.plot(POINTS_X[k], POINTS_Y[k], 'co')
-        plt.draw()
-        plt.pause(0.0001)
+        plt.plot(points_x[k], points_y[k], 'co')
     elif cluster == 1:
-        plt.plot(POINTS_X[k], POINTS_Y[k], 'go')
-        plt.draw()
+        plt.plot(points_x[k], points_y[k], 'go')
     else:
-        plt.plot(POINTS_X[k], POINTS_Y[k], 'bo')
-        plt.draw()
+        plt.plot(points_x[k], points_y[k], 'bo')
+
+plt.show()
