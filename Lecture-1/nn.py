@@ -18,7 +18,8 @@ y_ = tf.placeholder("float", [None, 10])
 # 학습 모델
 cross_entropy = -tf.reduce_sum(y_*tf.log(y))
 learn_rate = 0.01
-train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(learn_rate).minimize(
+    cross_entropy)
 
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())

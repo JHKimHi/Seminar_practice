@@ -54,4 +54,4 @@ for step in range(8):
     plt.draw()
     plt.pause(0.5)
 
-time.sleep(10)
+input("엔터를 눌러 종료")
