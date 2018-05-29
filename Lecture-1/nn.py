@@ -21,7 +21,7 @@ learn_rate = 0.01
 train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(cross_entropy)
 
 sess = tf.Session()
-sess.run(tf.initialize_all_variables())
+sess.run(tf.global_variables_initializer())
 
 for k in range(1000):
     # 100개 data만 추출

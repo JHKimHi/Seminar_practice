@@ -32,7 +32,7 @@ LOSS = tf.reduce_mean(tf.square(Y_MK - Y))
 OPTIMIZER = tf.train.GradientDescentOptimizer(0.5)
 TRAIN = OPTIMIZER.minimize(LOSS)
 
-INIT = tf.initialize_all_variables()
+INIT = tf.global_variables_initializer()
 
 # TF 세션을 실행
 SESS = tf.Session()
