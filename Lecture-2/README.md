@@ -1,6 +1,6 @@
 # Training and test DNN model for speech enhancement
 
-## Windows 10 - cpu
+## tensorflow and matlab code
 ask 유주현 선임 연구원
 
 
