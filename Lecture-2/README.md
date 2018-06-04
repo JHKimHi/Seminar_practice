@@ -1,7 +1,7 @@
-# Install Tensorflow
+# Training and test DNN model for speech enhancement
 
 ## Windows 10 - cpu
-0. Download python3.6.5 - 64bit
+0. Download training_and_test_model.py
 1. Install python3.6.5(Add PATH)
 2. open powershell/cmd/etc.
 3. python -m pip install tensorflow
